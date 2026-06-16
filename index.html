@@ -8,38 +8,35 @@
 
 body{
     font-family: Arial, sans-serif;
-    background:#f4f6f9;
+    background:#eef2f7;
     margin:0;
     padding:30px;
 }
 
-.container{
-    max-width:1200px;
-    margin:auto;
-    background:white;
+.header{
+    background:#4a89dc;
+    color:white;
+    text-align:center;
     padding:25px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-
-h1{
-    text-align:center;
-    color:#2c3e50;
-    margin-bottom:5px;
-}
-
-.subtitle{
-    text-align:center;
-    color:#777;
+    border-radius:20px;
+    font-size:42px;
+    font-weight:bold;
     margin-bottom:25px;
 }
 
-input{
+.container{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,0.1);
+}
+
+.search{
     width:100%;
     padding:12px;
     margin-bottom:20px;
+    border-radius:10px;
     border:1px solid #ccc;
-    border-radius:8px;
     font-size:16px;
 }
 
@@ -49,20 +46,45 @@ table{
 }
 
 th{
-    background:#4CAF50;
+    background:#4a89dc;
     color:white;
-    padding:12px;
-    text-align:center;
+    padding:14px;
 }
 
 td{
-    padding:10px;
-    border-bottom:1px solid #ddd;
+    padding:14px;
     text-align:center;
+    border-bottom:1px solid #ddd;
 }
 
 tr:hover{
-    background:#f5f5f5;
+    background:#f8f9fb;
+}
+
+.nama{
+    background:#e8f1ff;
+    color:#2d6cdf;
+    padding:6px 14px;
+    border-radius:20px;
+    display:inline-block;
+}
+
+.nilai{
+    font-size:30px;
+    font-weight:bold;
+    color:#222;
+}
+
+.ket{
+    font-size:14px;
+    margin-top:4px;
+}
+
+.footer{
+    text-align:center;
+    margin-top:25px;
+    color:#666;
+    font-size:20px;
 }
 
 </style>
@@ -70,52 +92,90 @@ tr:hover{
 
 <body>
 
-<div class="container">
-
-<h1>Evaluasi Hasil Belajar Siswa</h1>
-
-<div class="subtitle">
-Aplikasi Pembelajaran Calistung Interaktif
+<div class="header">
+📚 Evaluasi Hasil Belajar Siswa
 </div>
 
+<div class="container">
+
 <input
+class="search"
 type="text"
 id="search"
 placeholder="Cari nama siswa..."
 onkeyup="filterTable()">
 
-<table id="tabel"></table>
+<table>
 
+<thead>
+<tr>
+<th>No</th>
+<th>Nama</th>
+<th>Membaca</th>
+<th>Menulis</th>
+<th>Berhitung</th>
+<th>Favorit</th>
+<th>Terbaik</th>
+<th>Perlu Ditingkatkan</th>
+</tr>
+</thead>
+
+<tbody id="tabel">
+</tbody>
+
+</table>
+
+</div>
+
+<div class="footer">
+Sistem Evaluasi Calistung SLB-C Sumbersari
 </div>
 
 <script>
 
 fetch("https://script.google.com/macros/s/AKfycbzIlQ0W1Feq4iZJdmTSRABipVXFDxd1BHb_e1dN2KrcpYg_I6MSNglEE4De8ZzDjbmHuQ/exec")
-.then(response => response.json())
+.then(res => res.json())
 .then(data => {
 
 let html = "";
 
-data.forEach((row,index)=>{
-
-html += "<tr>";
-
-row.forEach(col=>{
-
-if(index==0)
+for(let i=1;i<data.length;i++)
 {
-html += "<th>"+col+"</th>";
+    let row = data[i];
+
+    html += `
+    <tr>
+
+    <td>${i}</td>
+
+    <td>
+        <span class="nama">${row[0]}</span>
+    </td>
+
+    <td>
+        <div class="nilai">${row[1]}</div>
+        <div class="ket">${row[2]}</div>
+    </td>
+
+    <td>
+        <div class="nilai">${row[3]}</div>
+        <div class="ket">${row[4]}</div>
+    </td>
+
+    <td>
+        <div class="nilai">${row[5]}</div>
+        <div class="ket">${row[6]}</div>
+    </td>
+
+    <td>${row[7]}</td>
+
+    <td>${row[8]}</td>
+
+    <td>${row[9]}</td>
+
+    </tr>
+    `;
 }
-else
-{
-html += "<td>"+col+"</td>";
-}
-
-});
-
-html += "</tr>";
-
-});
 
 document.getElementById("tabel").innerHTML = html;
 
@@ -123,21 +183,27 @@ document.getElementById("tabel").innerHTML = html;
 
 function filterTable()
 {
-let input =
-document.getElementById("search")
-.value.toLowerCase();
+    let input =
+    document.getElementById("search")
+    .value
+    .toLowerCase();
 
-let rows =
-document.querySelectorAll("#tabel tr");
+    let rows =
+    document.querySelectorAll("#tabel tr");
 
-for(let i=1;i<rows.length;i++)
-{
-let text =
-rows[i].innerText.toLowerCase();
+    rows.forEach(row=>{
 
-rows[i].style.display =
-text.includes(input) ? "" : "none";
-}
+        let nama =
+        row.children[1]
+        .innerText
+        .toLowerCase();
+
+        row.style.display =
+        nama.includes(input)
+        ? ""
+        : "none";
+
+    });
 }
 
 </script>
