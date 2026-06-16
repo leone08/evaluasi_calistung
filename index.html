@@ -7,10 +7,10 @@
 <style>
 
 body{
-    font-family: Arial, sans-serif;
+    font-family:'Segoe UI',sans-serif;
     background:#eef2f7;
     margin:0;
-    padding:30px;
+    padding:35px;
 }
 
 .header{
@@ -22,23 +22,32 @@ body{
     font-size:42px;
     font-weight:bold;
     margin-bottom:25px;
+    box-shadow:0 3px 15px rgba(0,0,0,0.1);
 }
 
 .container{
     background:white;
     border-radius:20px;
-    padding:25px;
+    padding:30px;
     box-shadow:0 3px 15px rgba(0,0,0,0.1);
 }
 
 .search{
-    width:100%;
-    padding:12px;
-    margin-bottom:20px;
-    margin-right:10px;
-    border-radius:10px;
+    width:350px;
+    padding:12px 15px;
+    margin:0 auto 20px auto;
+    display:block;
+    border-radius:30px;
     border:1px solid #ccc;
     font-size:16px;
+}
+
+.info{
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    color:#555;
+    margin-bottom:20px;
 }
 
 table{
@@ -49,36 +58,53 @@ table{
 th{
     background:#4a89dc;
     color:white;
-    padding:14px;
+    padding:15px;
 }
 
 td{
-    padding:14px;
+    padding:15px;
     text-align:center;
-    border-bottom:1px solid #ddd;
+    border-bottom:1px solid #e5e5e5;
 }
 
 tr:hover{
-    background:#f8f9fb;
+    background:#f7f9fc;
 }
 
 .nama{
     background:#e8f1ff;
     color:#2d6cdf;
-    padding:6px 14px;
+    padding:8px 15px;
     border-radius:20px;
     display:inline-block;
 }
 
 .nilai{
-    font-size:30px;
+    font-size:20px;
     font-weight:bold;
     color:#222;
 }
 
 .ket{
     font-size:14px;
-    margin-top:4px;
+    margin-top:5px;
+    color:#666;
+}
+
+.badge-hijau{
+    background:#d4edda;
+    color:#155724;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.badge-merah{
+    background:#f8d7da;
+    color:#721c24;
+    padding:6px 12px;
+    border-radius:20px;
+    font-weight:bold;
 }
 
 .footer{
@@ -103,14 +129,19 @@ tr:hover{
 class="search"
 type="text"
 id="search"
-placeholder="Cari nama siswa..."
+placeholder="🔍 Cari nama siswa..."
 onkeyup="filterTable()">
+
+<div class="info" id="jumlahSiswa">
+Jumlah siswa : 0
+</div>
 
 <table>
 
 <thead>
 <tr>
 <th>No</th>
+<th>Tanggal</th>
 <th>Nama</th>
 <th>Membaca</th>
 <th>Menulis</th>
@@ -134,7 +165,7 @@ Sistem Evaluasi Calistung SLB-C Sumbersari
 
 <script>
 
-fetch("https://script.google.com/macros/s/AKfycbzIlQ0W1Feq4iZJdmTSRABipVXFDxd1BHb_e1dN2KrcpYg_I6MSNglEE4De8ZzDjbmHuQ/exec")
+fetch("https://script.google.com/macros/s/AKfycbz4VT-AitIKi-IO3LNo8-dPJOg-iOrOCdrxAv68eq04WtftrOV5vu1r5ONUgwT9ipuCsg/exec")
 .then(res => res.json())
 .then(data => {
 
@@ -149,36 +180,55 @@ for(let i=1;i<data.length;i++)
 
     <td>${i}</td>
 
-    <td>
-        <span class="nama">${row[0]}</span>
-    </td>
+<td>${new Date(row[0]).toLocaleString('id-ID',{
+day:'2-digit',
+month:'2-digit',
+year:'numeric',
+hour:'2-digit',
+minute:'2-digit'
+})}</td>
 
-    <td>
-        <div class="nilai">${row[1]}</div>
-        <div class="ket">${row[2]}</div>
-    </td>
+<td>
+    <span class="nama">${row[1]}</span>
+</td>
 
-    <td>
-        <div class="nilai">${row[3]}</div>
-        <div class="ket">${row[4]}</div>
-    </td>
+<td>
+    <div class="nilai">${row[2]}</div>
+    <div class="ket">${row[3]}</div>
+</td>
 
-    <td>
-        <div class="nilai">${row[5]}</div>
-        <div class="ket">${row[6]}</div>
-    </td>
+<td>
+    <div class="nilai">${row[4]}</div>
+    <div class="ket">${row[5]}</div>
+</td>
 
-    <td>${row[7]}</td>
+<td>
+    <div class="nilai">${row[6]}</div>
+    <div class="ket">${row[7]}</div>
+</td>
 
-    <td>${row[8]}</td>
+<td>${row[8]}</td>
 
-    <td>${row[9]}</td>
+<td>
+    <span class="badge-hijau">
+    ${row[9]}
+    </span>
+</td>
+
+<td>
+    <span class="badge-merah">
+    ${row[10]}
+    </span>
+</td>
 
     </tr>
     `;
 }
 
 document.getElementById("tabel").innerHTML = html;
+
+document.getElementById("jumlahSiswa").innerHTML =
+"Jumlah siswa : " + (data.length - 1);
 
 });
 
@@ -195,7 +245,7 @@ function filterTable()
     rows.forEach(row=>{
 
         let nama =
-        row.children[1]
+        row.children[2]
         .innerText
         .toLowerCase();
 
