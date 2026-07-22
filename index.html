@@ -161,7 +161,7 @@ Sistem Evaluasi Calistung SLB-C Sumbersari
 
 <script>
 
-fetch("https://script.google.com/macros/s/AKfycbz4VT-AitIKi-IO3LNo8-dPJOg-iOrOCdrxAv68eq04WtftrOV5vu1r5ONUgwT9ipuCsg/exec")
+fetch("https://script.google.com/macros/s/AKfycbxk50S93O09XEZHwVXtGSxA37HSiOtFh58y7mISRyeZ5GH4F7mQGjx9NfZZmRxp_zAVpg/exec")
 .then(res => res.json())
 .then(data => {
 
@@ -185,35 +185,35 @@ minute:'2-digit'
 })}</td>
 
 <td>
-    <span class="nama">${row[1]}</span>
+    <span class="nama">${row[2]}</span>
 </td>
 
 <td>
-    <div class="nilai">${row[2]}</div>
-    <div class="ket">${row[3]}</div>
+    <div class="nilai">${row[3]}</div>
+    <div class="ket">${row[4]}</div>
 </td>
 
 <td>
-    <div class="nilai">${row[4]}</div>
-    <div class="ket">${row[5]}</div>
+    <div class="nilai">${row[5]}</div>
+    <div class="ket">${row[6]}</div>
 </td>
 
 <td>
-    <div class="nilai">${row[6]}</div>
-    <div class="ket">${row[7]}</div>
+    <div class="nilai">${row[7]}</div>
+    <div class="ket">${row[8]}</div>
 </td>
 
-<td>${row[8]}</td>
+<td>${row[9]}</td>
 
 <td>
     <span class="badge-hijau">
-    ${row[9]}
+    ${row[10]}
     </span>
 </td>
 
 <td>
     <span class="badge-merah">
-    ${row[10]}
+    ${row[11]}
     </span>
 </td>
 
@@ -222,9 +222,6 @@ minute:'2-digit'
 }
 
 document.getElementById("tabel").innerHTML = html;
-
-document.getElementById("jumlahSiswa").innerHTML =
-"Jumlah siswa : " + (data.length - 1);
 
 });
 
