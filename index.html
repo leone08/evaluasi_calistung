@@ -85,6 +85,13 @@ tr:hover{
     color:#222;
 }
 
+.nilai-belum{
+    color:#8a8a8a;
+    font-size:16px;
+    font-style:italic;
+    font-weight:500;
+}
+
 .ket{
     font-size:14px;
     margin-top:5px;
@@ -164,58 +171,81 @@ Sistem Evaluasi Calistung SLB-C Sumbersari
 fetch("https://script.google.com/macros/s/AKfycbw0w57nUE711fciOIVHGutBCLooIvWAkgeJlaNewEBxo_YChir68KEyNrZb4qEdyUKQ3g/exec")
 .then(res => res.json())
 .then(data => {
+    
+data = [data[0], ...data.slice(1).reverse()];
 
 let html = "";
 
-for(let i=1;i<data.length;i++)
+for(let i = 1; i < data.length; i++)
 {
     let row = data[i];
+
+    // Membaca
+    let nilaiMembaca = row[3] == "-" 
+        ? "<span class='nilai-belum'>Belum dikerjakan</span>"
+        : row[3];
+
+    let ketMembaca = row[4] == "-" ? "" : row[4];
+
+    // Menulis
+    let nilaiMenulis = row[5] == "-"
+        ? "<span class='nilai-belum'>Belum dikerjakan</span>"
+        : row[5];
+
+    let ketMenulis = row[6] == "-" ? "" : row[6];
+
+    // Berhitung
+    let nilaiBerhitung = row[7] == "-"
+        ? "<span class='nilai-belum'>Belum dikerjakan</span>"
+        : row[7];
+
+    let ketBerhitung = row[8] == "-" ? "" : row[8];
 
     html += `
     <tr>
 
-    <td>${i}</td>
+        <td>${i}</td>
 
-<td>${new Date(row[0]).toLocaleString('id-ID',{
-day:'2-digit',
-month:'2-digit',
-year:'numeric',
-hour:'2-digit',
-minute:'2-digit'
-})}</td>
+        <td>${new Date(row[0]).toLocaleString('id-ID',{
+            day:'2-digit',
+            month:'2-digit',
+            year:'numeric',
+            hour:'2-digit',
+            minute:'2-digit'
+        })}</td>
 
-<td>
-    <span class="nama">${row[2]}</span>
-</td>
+        <td>
+            <span class="nama">${row[2]}</span>
+        </td>
 
-<td>
-    <div class="nilai">${row[3]}</div>
-    <div class="ket">${row[4]}</div>
-</td>
+        <td>
+            <div class="nilai">${nilaiMembaca}</div>
+            <div class="ket">${ketMembaca}</div>
+        </td>
 
-<td>
-    <div class="nilai">${row[5]}</div>
-    <div class="ket">${row[6]}</div>
-</td>
+        <td>
+            <div class="nilai">${nilaiMenulis}</div>
+            <div class="ket">${ketMenulis}</div>
+        </td>
 
-<td>
-    <div class="nilai">${row[7]}</div>
-    <div class="ket">${row[8]}</div>
-</td>
+        <td>
+            <div class="nilai">${nilaiBerhitung}</div>
+            <div class="ket">${ketBerhitung}</div>
+        </td>
 
-<td>${row[9]}</td>
+        <td>${row[9]}</td>
 
-<td>
-    <span class="badge-hijau">
-    ${row[10]}
-    </span>
-</td>
+        <td>
+            <span class="badge-hijau">
+                ${row[10]}
+            </span>
+        </td>
 
-<td>
-    <span class="badge-merah">
-    ${row[11]}
-    </span>
-</td>
+        <td>
+            <span class="badge-merah">
+                ${row[11]}
+            </span>
+        </td>
 
     </tr>
     `;
@@ -228,29 +258,28 @@ document.getElementById("tabel").innerHTML = html;
 function filterTable()
 {
     let input =
-    document.getElementById("search")
-    .value
-    .toLowerCase();
+        document.getElementById("search")
+        .value
+        .toLowerCase();
 
     let rows =
-    document.querySelectorAll("#tabel tr");
+        document.querySelectorAll("#tabel tr");
 
     rows.forEach(row=>{
 
         let nama =
-        row.children[2]
-        .innerText
-        .toLowerCase();
+            row.children[2]
+            .innerText
+            .toLowerCase();
 
         row.style.display =
-        nama.includes(input)
-        ? ""
-        : "none";
+            nama.includes(input)
+            ? ""
+            : "none";
 
     });
 }
 
 </script>
-
 </body>
 </html>
